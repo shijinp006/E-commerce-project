@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #ecf0f1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            max-width: 400px;
+            background-color: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        .card-header {
+            background-color: #e94560;
+            color: white;
+            border-radius: 10px 10px 0 0;
+            padding: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .form-control {
+            background-color: #ecf0f1;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .form-control:focus {
+            border: 2px solid #e94560;
+            outline: none;
+            box-shadow: none;
+        }
+        .btn-success {
+            background-color: #e94560;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-success:hover {
+            background-color: #d12f51;
+            transform: translateY(-2px);
+        }
+        .btn-warning {
+            background-color: #f39c12;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-warning:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background-color: #c0392b;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-danger:hover {
+            background-color: #a93226;
+            transform: translateY(-2px);
+        }
+        .alert {
+            display: none;
+        }
+        .alert.show {
+            display: block;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="container">
+        <div class="card text-center">
+            <div class="card-header">OTP Verification</div>
+            <div class="card-body">
+                <div id="alertContainer" class="alert alert-danger"></div> <!-- Alert for error messages -->
+                <form id="otpForm">
+                    <div class="mb-3">
+                        <input type="text" name="otp" id="otpInput" class="form-control" placeholder="Enter OTP" disabled />
+                        <button type="button" id="toggleButton" class="btn btn-warning mt-3">Enable Input</button>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Verify OTP</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('toggleButton').addEventListener('click', () => {
+            const otpInput = document.getElementById('otpInput');
+            const toggleButton = document.getElementById('toggleButton');
+
+            if (otpInput.disabled) {
+                otpInput.disabled = false;
+                otpInput.focus(); // Automatically focus the input when enabled
+                toggleButton.textContent = 'Disable Input';
+                toggleButton.classList.remove('btn-warning');
+                toggleButton.classList.add('btn-danger');
+            } else {
+                otpInput.disabled = true;
+                toggleButton.textContent = 'Enable Input';
+                toggleButton.classList.remove('btn-danger');
+                toggleButton.classList.add('btn-warning');
+            }
+        });
+
+        document.getElementById('otpForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const otp = document.getElementById('otpInput').value;
+            const alertContainer = document.getElementById('alertContainer');
+
+            try {
+                const response = await fetch('/api/user/verifyotp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ otp })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Success: handle successful OTP verification
+                    alertContainer.classList.remove('alert-danger');
+                    alertContainer.classList.add('alert-success');
+                    alertContainer.textContent = data.message;
+                    alertContainer.style.display = 'block';
+                    // Optionally redirect after a delay
+                    setTimeout(() => {
+                        window.location.href = '/confirmpassword'; // Replace with actual success page
+                    }, 2000);
+                } else {
+                    // Error: handle invalid OTP or other errors
+                    alertContainer.classList.remove('alert-success');
+                    alertContainer.classList.add('alert-danger');
+                    alertContainer.textContent = data.message;
+                    alertContainer.style.display = 'block';
+                }
+            } catch (error) {
+                // Handle network or unexpected errors
+                alertContainer.classList.remove('alert-success');
+                alertContainer.classList.add('alert-danger');
+                alertContainer.textContent = 'An unexpected error occurred. Please try again later.';
+                alertContainer.style.display = 'block';
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Signup</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <section class="forms-section">
+        <h1 class="section-title">Login & Signup Forms</h1>
+        <div class="forms">
+            <!-- Login Form -->
+            <div class="form-wrapper is-active" id="login-form-wrapper">
+                <button type="button" class="switcher switcher-login">Login<span class="underline"></span></button>
+                <form action="/api/user/login" id="login-form" class="form form-login" method="post">
+                    <fieldset>
+                        <legend>Please enter your email and password for login.</legend>
+                        <div class="input-block">
+                            <label for="login-email">E-mail</label>
+                            <input id="login-email" type="email" name="email" required>
+                        </div>
+                        <div class="input-block">
+                            <label for="login-password">Password</label>
+                            <input id="login-password" type="password" name="password" required>
+                        </div>
+                        <a href="resetpassword">Forgot password?</a>
+                    </fieldset>
+                    <button type="submit" class="btn-login">Login</button>
+                    <div id="login-message"></div>
+                </form>
+            </div>
+            
+            <!-- Signup Form -->
+            <div class="form-wrapper" id="signup-form-wrapper">
+                <button type="button" class="switcher switcher-signup">Sign Up<span class="underline"></span></button>
+                <form action="/api/user/signup"id="signup-form" class="form form-signup" method="post">
+                    <fieldset>
+                        <legend>Please enter your email, username, password, and password confirmation for signup.</legend>
+                        <div class="input-block">
+                            <label for="signup-username">Username</label>
+                            <input id="signup-username" type="text" name="Username" required>
+                        </div>
+                        <div class="input-block">
+                            <label for="signup-email">E-mail</label>
+                            <input id="signup-email" type="email" name="email" required>
+                        </div>
+                        <div class="input-block">
+                            <label for="signup-password">Password</label>
+                            <input id="signup-password" type="password" name="password" required>
+                        </div>
+                    </fieldset>
+                    <button type="submit" class="btn-signup">Sign Up</button>
+                    <div id="signup-message"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+          <script src="js/login.js"></script>
+
+    </body>
+    </html>
+  
+   
