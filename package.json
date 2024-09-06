@@ -9,7 +9,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
@@ -24,6 +23,8 @@
     "nodemailer": "^6.9.15",
     "nodemo": "^1.0.0",
     "nodemon": "^3.1.4",
+    "project2": "file:",
     "session": "^0.1.0"
-  }
+  },
+  "description": ""
 }
