@@ -1,6 +1,8 @@
+
+
 let homepage = (req,res) => { 
 
-    res.render();
+    res.render("Admin/Adminindex");
 };
 
 let loginpage = (req,res) => {
@@ -20,7 +22,10 @@ let resetpassword = (req,res) => {
     let confirmpassword = (req,res) => {
       
       res.render("Admin/Adminconfirmpassword");
-    }
+    };
 
+    
+
+    
     
   module.exports={loginpage,homepage,resetpassword,Otpverification,confirmpassword}

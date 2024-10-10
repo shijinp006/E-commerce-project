@@ -19,16 +19,16 @@ const productSchema = new mongoose.Schema({
     category: {
       type: String,
       required: true,
-      enum: ['Electronics', 'Clothing', 'Accessories', 'Home', 'Beauty'] // Limited to specific categories
+      enum: ['Normal pillow','Luxury pillow'] // Limited to specific categories
     },
     stock: {
       type: Number,
       required: true,
       min: 0 // Stock must be a positive number or zero
     },
-    images: {
-      type: [String], // Array of image URLs
-      required: false
+    image: {
+      type: String, 
+      required: true
     },
     created_at: {
       type: Date,

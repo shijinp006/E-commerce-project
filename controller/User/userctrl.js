@@ -10,38 +10,41 @@ const bcrypt = require("bcrypt");
 // Assuming this is part of your user registration function
 let createUser = asyncHandler(async (req, res) => {
     try {
-        const { Username,email, password } = req.body;
+        const { username, email, password, mobile } = req.body;
+
+        // Check if the username or email already exists
+        const existingUser = await User.findOne({ 
+            $or: [{ username }, { email }] 
+        });        
+
+        if (existingUser) {
+            // If the username or email already exists, return an error
+            return res.status(400).json("Username or email already exists");
+        }
 
         // Hash the password before saving it
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        finduser =  User.findOne({Username:Username,email:email,password:password})
 
-        if(finduser){
+        // Save the new user with the hashed password
+        const newUser = new User({
+            username,
+            email,
+            password: hashedPassword,
+            mobile,
+            is_blocked :false
+        });
 
-            res.json("Username already existed")
+        await newUser.save();
 
-        }else{
-
-             // Save the user with the hashed password
-            const newUser = new User({
-                email: email,
-                password: hashedPassword,
-                Username:Username
-            });
-    
-            await newUser.save();
-            
-            res.redirect("/home")
-           
-        }
-       
-        
+        // On successful sign-up, redirect or send a success response
+        res.status(201).json("User created successfully");
     } catch (error) {
         console.error(error.message);
         res.status(500).json("Server error");
     }
 });
+
 
 
 
@@ -50,37 +53,29 @@ let login = asyncHandler(async (req, res) => {
         const { email, password } = req.body;
 
         // Find the user by email
-        const finduser = await User.findOne({ email: email });
+        const finduser = await User.findOne({ email });
 
         if (finduser) {
             // Compare the provided password with the hashed password stored in the database
             const isMatch = await bcrypt.compare(password, finduser.password);
 
-            if (isMatch) {
+            if (isMatch&&!finduser.is_blocked) {
                 // If passwords match, proceed with login
-                req.session.email = finduser.email;
                 console.log("Logged in successfully");
-
-                res.redirect("/home")
-                
+                return res.status(200).json("Logged in successfully");
             } else {
                 // If passwords don't match
-                res.status(401).json("Invalid password or username");
+                return res.status(401).json("Invalid password or username or you are blocked" );
             }
         } else {
             // If the user is not found
-            res.status(401).json("Invalid password or username");
-           
+            return res.status(401).json("Invalid password or username or you are blocked");
         }
     } catch (error) {
         console.error(error.message);
-        res.status(500).json("Server error");
+        return res.status(500).json("Server error");
     }
 });
-
-
-            
-
 
 const forgotpassword = async (req, res) => {
     try {

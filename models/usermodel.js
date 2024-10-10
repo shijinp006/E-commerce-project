@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
-const bcrypt=require("bcrypt")// Erase if already required
+const bcrypt=require("bcrypt");// Erase if already required
+const { truncate } = require('fs');
 
 // Declare the Schema of the Mongo model
 let  userSchema = new mongoose.Schema({
-    Username:{
+    username:{
         type:String,
         required:true,
        
@@ -28,12 +29,19 @@ let  userSchema = new mongoose.Schema({
             productId: String,
             quantity: { type: Number, default: 1 }
         }
-    ]
-    // mobile:{
-    //     type:String,
-    //     required:true,
+    ],
+    mobile:{
+
+        type:String,
+        required:true,
         
-    // },
+    },
+
+    is_blocked : {
+
+        type:Boolean,
+        required:true
+    }
 });
 
 

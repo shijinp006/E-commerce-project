@@ -1,3 +1,6 @@
+const Category = require('../../models/category'); // Adjust the path based on your project structure
+
+const Product = require("../../models/product")
 
 let homepage =(req,res) => {
     res.render("User/index")
@@ -11,8 +14,29 @@ let cart = (req,res) =>{
   res.render("User/cart")
 };
 
-let product = (req,res) =>{
-  res.render("User/product_list")
+let product = async (req,res) =>{
+  try {
+    const categories = await Category.find(); 
+    
+
+    let products;
+    if (req.query.category) {
+        const selectedCategory = req.query.category;  
+        
+        
+        products = await Product.find({ category: selectedCategory });  
+        
+        
+    } else {
+        products = await Product.find();  
+    }
+
+   
+    res.render('User/product_list', { categories, products });
+} catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+}
 };
 
 let blog = (re,res)=>{
@@ -59,8 +83,29 @@ let loginpage = (req,res) => {
       res.render("User/single-blog")
     };
 
-    let singleproduct = (req,res) =>{
-      res.render("User/single-product")
+    let singleproduct = async (req,res) =>{
+      
+      try {
+        const productId = req.query.product; 
+
+        const products = await Product.findById(productId); 
+
+        let product=[];
+
+        product.push(products)
+      
+        
+
+        if (!product) {
+            return res.status(404).send('Product not found');
+        }
+
+        res.render('User/single-product', { product:product }); 
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+     
     };
 
     let main = (req,res) =>{

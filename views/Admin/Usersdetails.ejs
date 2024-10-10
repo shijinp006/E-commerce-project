@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Users</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f4efe3; /* Soft Beige */
+      opacity: 0;
+      animation: fadeIn 1.5s forwards;
+    }
+    
+    /* Smooth fade-in animation */
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .sidebar {
+      background-color: #2c003e; /* Dark Purple */
+    }
+
+    .sidebar .nav-link {
+      color: #d1c4e9; /* Soft Lavender */
+      transition: color 0.3s, background-color 0.3s;
+    }
+
+    .sidebar .nav-link.active,
+    .sidebar .nav-link:hover {
+      color: #ffeb3b; /* Yellow */
+      background-color: #7b1fa2; /* Deep Purple */
+      padding-left: 20px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .sidebar img {
+      filter: brightness(1.2);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .sidebar img:hover {
+      transform: rotate(360deg);
+    }
+
+    /* Table hover effect */
+    .table-hover tbody tr:hover {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      transform: translateY(-5px);
+      transition: transform 0.3s, box-shadow 0.3s;
+      background-color: #f3e5f5; /* Light Lavender */
+    }
+
+    .table-light {
+      background-color: #fff9c4; /* Light Yellow */
+    }
+
+    /* Main content area */
+    main {
+      background-color: #f4efe3; /* Soft Beige */
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateY(50px);
+      animation: contentFadeIn 1s forwards ease-in-out 0.5s;
+    }
+
+    @keyframes contentFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      color: #7b1fa2; /* Deep Purple */
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      width: 100%;
+      height: 4px;
+      background-color: #ffeb3b; /* Yellow */
+      animation: underline 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    @keyframes underline {
+      from {
+        width: 0;
+      }
+      to {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block position-fixed min-vh-100 bg-dark sidebar collapse">
+        <img src="/images/royal-store-logo.png" class="w-50 p-3" alt="IMG-LOGO">
+        <div class="pt-3">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active fs-5" aria-current="page" href="/api/admin/admin-home">
+                <i class="bi bi-speedometer2 fa fa-tachometer"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-5" href="/api/admin/category">
+                <i class="bi bi-box-seam fas fa-chart-line"></i> Categories
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-5" href="/api/admin/addproduct">
+                <i class="bi bi-tag fas fa-shopping-cart"></i> Products
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-5" href="#">
+                <i class="bi bi-cart fas fa-users"></i> Orders
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-5" href="/api/admin/users">
+                <i class="bi bi-people fas fa-list-alt"></i> Users
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-5" href="#">
+                <i class="bi bi-gift fas fa-ticket-alt"></i> Coupons
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-5" href="#">
+                <i class="bi bi-megaphone fas fa-tags"></i> Offers
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-5" href="#">
+                <i class="bi bi-graph-up fas fa-chart-line"></i> Sales Report
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-5" href="#">
+                <i class="bi bi-box-arrow-right fas fa-sign-out-alt"></i> Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+      <!-- Main Content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 min-vh-100">
+        <div class="d-flex justify-content-center align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h1">Users</h1>
+        </div>
+
+        <table class="table table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>NO</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach(function(user, index) { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= user.username %></td>
+              <td><%= user.email %></td>
+              <td><%= user.mobile %></td>
+              <td>
+                <% if (user.is_blocked) { %>
+                  <form action="/api/Admin/unblockuser/<%=user._id%>" method="post">
+                  <button type="submit" class="btn btn-success unblock-btn" data-id="<%= user._id %>">Unblock</button>
+                </form>
+                <% } else { %>
+                  <form action="/api/Admin/blockuser/<%=user._id%>" method="post">
+                  <button type="submit" class="btn btn-danger block-btn" data-id="<%= user._id %>">Block</button>
+                </form>
+                <% } %>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.querySelectorAll('.block-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const userId = this.getAttribute('data-id');
+        // Send request to block user
+        fetch(`/api/admin/block-user/${userId}`, { method: 'POST' })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              location.reload(); // Refresh the page to update the UI
+            }
+          });
+      });
+    });
+
+    document.querySelectorAll('.unblock-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const userId = this.getAttribute('data-id');
+        // Send request to unblock user
+        fetch(`/api/admin/unblock-user/${userId}`, { method: 'POST' })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              location.reload(); // Refresh the page to update the UI
+            }
+          });
+      });
+    });
+  </script>
+</body>
+</html>

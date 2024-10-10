@@ -59,7 +59,7 @@ let Adminlogin = async (req, res) => {
                 req.session.email = findAdmin.email;
                 console.log("Logged in successfully");
 
-                res.json("logedd successfully");
+                res.status(200).redirect("/Adminhome")
 
                 // res.redirect("/Adminhome");
             } else {

@@ -13,7 +13,7 @@
             <!-- Login Form -->
             <div class="form-wrapper is-active" id="login-form-wrapper">
                 <button type="button" class="switcher switcher-login">Login<span class="underline"></span></button>
-                <form action="/api/user/login" id="login-form" class="form form-login" method="post">
+                <form id="login-form" class="form form-login">
                     <fieldset>
                         <legend>Please enter your email and password for login.</legend>
                         <div class="input-block">
@@ -34,16 +34,20 @@
             <!-- Signup Form -->
             <div class="form-wrapper" id="signup-form-wrapper">
                 <button type="button" class="switcher switcher-signup">Sign Up<span class="underline"></span></button>
-                <form action="/api/user/signup"id="signup-form" class="form form-signup" method="post">
+                <form id="signup-form" class="form form-signup">
                     <fieldset>
-                        <legend>Please enter your email, username, password, and password confirmation for signup.</legend>
+                        <legend>Please enter your username, email, mobile number, and password for signup.</legend>
                         <div class="input-block">
                             <label for="signup-username">Username</label>
-                            <input id="signup-username" type="text" name="Username" required>
+                            <input id="signup-username" type="text" name="username" required>
                         </div>
                         <div class="input-block">
                             <label for="signup-email">E-mail</label>
                             <input id="signup-email" type="email" name="email" required>
+                        </div>
+                        <div class="input-block">
+                            <label for="signup-mobile">Mobile</label>
+                            <input id="signup-mobile" type="text" name="mobile" required>
                         </div>
                         <div class="input-block">
                             <label for="signup-password">Password</label>
@@ -56,9 +60,86 @@
             </div>
         </div>
     </section>
-          <script src="js/login.js"></script>
 
-    </body>
-    </html>
-  
-   
+    <script src="js/login.js"></script>
+
+    <!-- Login Form JavaScript -->
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            const messageElement = document.getElementById('login-message');
+            messageElement.textContent = ''; // Clear any previous messages
+
+            try {
+                const response = await fetch('/api/user/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // If login is successful, redirect the user to the home page
+                    window.location.href = '/home';
+                } else {
+                    // Handle invalid credentials or other errors
+                    messageElement.textContent = result || 'Invalid credentials. Please try again.';
+                    messageElement.style.color = 'red';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                messageElement.textContent = 'Server error. Please try again later.';
+                messageElement.style.color = 'red';
+            }
+        });
+    </script>
+
+    <!-- Signup Form JavaScript -->
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent traditional form submission
+
+            const username = document.getElementById('signup-username').value;
+            const email = document.getElementById('signup-email').value;
+            const mobile = document.getElementById('signup-mobile').value;
+            const password = document.getElementById('signup-password').value;
+
+            const messageElement = document.getElementById('signup-message');
+            messageElement.textContent = ''; // Clear any previous messages
+
+            try {
+                const response = await fetch('/api/user/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, email, mobile, password }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // If the sign-up is successful, redirect or show success message
+                    window.location.href = '/home'; // Redirect to the home page
+                } else {
+                    // Show error message if sign-up fails
+                    messageElement.textContent = result || 'Sign-up failed. Please try again.';
+                    messageElement.style.color = 'red';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                messageElement.textContent = 'Server error. Please try again later.';
+                messageElement.style.color = 'red';
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -4,6 +4,8 @@ let express=require("express");
 
 let app= express();
 
+const bodyParser = require("body-parser");
+
 // let fetch = require("node-fetch")
 
 let dotenv=require("dotenv").config();
@@ -24,7 +26,7 @@ let home= require("./routes/User/routehome");
 
 let Adminhome= require("./routes/Admin/Adminroutehome");
 
-const bodyParser = require("body-parser");
+let Adminroute = require ("./routes/Admin/Adminrout");
 
 const {notfound, errorHandler} = require("./middleware/errorhandler");
 
@@ -50,6 +52,8 @@ app.use("/api/user",authRouter);
 
 app.use("/api/Admin",AdminauthRouter);
 
+app.use("/api/Admin",Adminroute);
+
 app.use(home);
 
 app.use(Adminhome);
@@ -57,6 +61,8 @@ app.use(Adminhome);
 app.use(notfound);
 
 app.use(errorHandler);
+
+
 
 app.listen(port,()=>{
     console.log(`server running start http://localhost:${port}`);

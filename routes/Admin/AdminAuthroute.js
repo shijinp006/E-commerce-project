@@ -12,7 +12,7 @@ router.post("/forgotpassword",forgotpassword);
 
 router.post("/verifyotp",verifyotp);
 
-router.post("/confirmpassword",confirmpassword)
+router.post("/confirmpassword",confirmpassword);
 
 
 
